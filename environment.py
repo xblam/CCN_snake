@@ -12,17 +12,18 @@ class Environment():
         self.nRows = 10
         self.nColumns = 10
         self.initSnakeLen = 2
-        self.defReward = -0.03
-        self.negReward = -1.
-        self.posReward = 2.
+        self.stepReward = -0.03
+        self.deathReward = -1.
+        self.foodReward = 2.
         self.waitTime = waitTime
         
-        
+        # if the snake is longer than the number of rows we just make the length of the snake shorter
         if self.initSnakeLen > self.nRows / 2:
             self.initSnakeLen = int(self.nRows / 2)
         
         self.screen = pg.display.set_mode((self.width, self.height))
         
+        # screenmap is the same layout i had as the matrix
         self.snakePos = list()
         self.screenMap = np.zeros((self.nRows, self.nColumns))
         
@@ -89,7 +90,7 @@ class Environment():
         # action = 2 -> right
         # action = 3 -> left
         gameOver = False
-        reward = self.defReward
+        reward = self.stepReward
         self.collected = False
         
         for event in pg.event.get():
@@ -112,57 +113,57 @@ class Environment():
             if snakeY > 0:
                 if self.screenMap[snakeY - 1][snakeX] == 0.5:
                     gameOver = True
-                    reward = self.negReward
+                    reward = self.deathReward
                 elif self.screenMap[snakeY - 1][snakeX] == 1:
-                    reward = self.posReward
+                    reward = self.foodReward
                     self.moveSnake((snakeY - 1, snakeX), True)
                 elif self.screenMap[snakeY - 1][snakeX] == 0:
                     self.moveSnake((snakeY - 1, snakeX), False)
             else:
                 gameOver = True
-                reward = self.negReward
+                reward = self.deathReward
                 
         elif action == 1:
             if snakeY < self.nRows - 1:
                 if self.screenMap[snakeY + 1][snakeX] == 0.5:
                     gameOver = True
-                    reward = self.negReward
+                    reward = self.deathReward
                 elif self.screenMap[snakeY + 1][snakeX] == 1:
-                    reward = self.posReward
+                    reward = self.foodReward
                     self.moveSnake((snakeY + 1, snakeX), True)
                 elif self.screenMap[snakeY + 1][snakeX] == 0:
                     self.moveSnake((snakeY + 1, snakeX), False)
             else:
                 gameOver = True
-                reward = self.negReward
+                reward = self.deathReward
                 
         elif action == 2:
             if snakeX < self.nColumns - 1:
                 if self.screenMap[snakeY][snakeX + 1] == 0.5:
                     gameOver = True
-                    reward = self.negReward
+                    reward = self.deathReward
                 elif self.screenMap[snakeY][snakeX + 1] == 1:
-                    reward = self.posReward
+                    reward = self.foodReward
                     self.moveSnake((snakeY, snakeX + 1), True)
                 elif self.screenMap[snakeY][snakeX + 1] == 0:
                     self.moveSnake((snakeY, snakeX + 1), False)
             else:
                 gameOver = True
-                reward = self.negReward 
+                reward = self.deathReward 
         
         elif action == 3:
             if snakeX > 0:
                 if self.screenMap[snakeY][snakeX - 1] == 0.5:
                     gameOver = True
-                    reward = self.negReward
+                    reward = self.deathReward
                 elif self.screenMap[snakeY][snakeX - 1] == 1:
-                    reward = self.posReward
+                    reward = self.foodReward
                     self.moveSnake((snakeY, snakeX - 1), True)
                 elif self.screenMap[snakeY][snakeX - 1] == 0:
                     self.moveSnake((snakeY, snakeX - 1), False)
             else:
                 gameOver = True
-                reward = self.negReward
+                reward = self.deathReward
                 
         self.drawScreen()
         
@@ -188,7 +189,7 @@ class Environment():
         self.drawScreen()
 
 if __name__ == '__main__':
-     env = Environment(100)
+     env = Environment(1)
      gameOver = False
      start = False
      action = 0

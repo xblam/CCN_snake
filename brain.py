@@ -29,7 +29,7 @@ class Brain():
           
           self.model.add(Dense(self.numOutputs))
           
-          self.model.compile(optimizer = Adam(lr = self.learningRate), loss = 'mean_squared_error')
+          self.model.compile(optimizer = Adam(learning_rate = self.learningRate), loss = 'mean_squared_error')
           
      #Building a method that will load a model
      def loadModel(self, filepath):
