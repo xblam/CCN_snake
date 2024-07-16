@@ -42,7 +42,7 @@ nCollected = 0
 maxNCollected = 0
 totNCollected = 0
 scores = list()
-while True:
+while epoch > 10:
      epoch += 1
      
      #Resetting the Evironment and starting to play the game
@@ -97,10 +97,3 @@ while True:
           plt.show()
      
      print('Epoch: ' + str(epoch) + ' Current Best: ' + str(maxNCollected) + ' Epsilon: {:.5f}'.format(epsilon))
-     
-     
-     
-     
-     
-
-

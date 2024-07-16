@@ -2,6 +2,7 @@
 
 import numpy as np
 import pygame as pg
+from collections import deque
 
 
 get_dir = {
@@ -10,10 +11,12 @@ get_dir = {
     "RIGHT" : 2,
     "LEFT" : 3
 }
+
+display = False
 class Environment():
     
     def __init__(self):
-        
+        self.snake = deque()
         self.width = 880
         self.height = 880
         self.nRows = 8
@@ -22,29 +25,39 @@ class Environment():
         self.stepReward = -0.03
         self.deathReward = -1.
         self.foodReward = 2.
-        
-        # if the snake is longer than the number of rows we just make the length of the snake shorter
-        if self.initSnakeLen > self.nRows / 2:
-            self.initSnakeLen = int(self.nRows / 2)
-        
+
         self.screen = pg.display.set_mode((self.width, self.height))
+
+        self.reset()
         
         # screenmap is the same layout i had as the matrix
-        self.snakePos = list()
+        
+    
+
+    def reset(self):
+
+        self.snake.clear()
         self.screenMap = np.zeros((self.nRows, self.nColumns))
         
-        for i in range(self.initSnakeLen):
-            self.snakePos.append((int(self.nRows / 2) + i, int(self.nColumns / 2)))
-            self.screenMap[int(self.nRows / 2) + i][int(self.nColumns / 2)] = 0.5
-            
-        self.applePos = self.placeApple()
-        
-        self.drawScreen()
+        # draw in the snake's initial position
+        self.snake.append((int(self.nRows / 2), int(self.nColumns / 2)))
+        self.snake.append((int(self.nRows/2) + 1, int(self.nColumns/2)))
+
+        # spawn in the fruit
+        self.fruitPos = self.placeFruit()
+
+        self.update_screenMap()
+
         self.collected = False
         
         self.lastMove = "UP"
         
-    def placeApple(self):
+        self.drawScreen()
+    # def update_screenMap(self):
+    #     for square in self.snake:
+    #         self.screenMap[int(self.nRows / 2) + 1][int(self.nColumns / 2)] = 0.5
+    
+    def placeFruit(self):
         posx = np.random.randint(0, self.nColumns)
         posy = np.random.randint(0, self.nRows)
         while self.screenMap[posy][posx] == 0.5:
@@ -55,6 +68,10 @@ class Environment():
         
         return (posy, posx)
     
+    def update_screenMap(self):
+        for part in self.snake:
+            self.screenMap[part[0]][part[1]] = 0.5
+        self.screenMap[self.fruitPos[0]][self.fruitPos[1]] = 1
     
     def drawScreen(self):
         
@@ -74,21 +91,20 @@ class Environment():
       
     def moveSnake(self, nextPos, col):
         
-        self.snakePos.insert(0, nextPos)
+        self.snake.appendleft(nextPos)
         
         if not col:
-            self.snakePos.pop(len(self.snakePos) - 1)
+            self.snake.pop()
         
         self.screenMap = np.zeros((self.nRows, self.nColumns))
         
-        for i in range(len(self.snakePos)):
-            self.screenMap[self.snakePos[i][0]][self.snakePos[i][1]] = 0.5
+        self.update_screenMap()
         
         if col:
-            self.applePos = self.placeApple()
+            self.fruitPos = self.placeFruit()
             self.collected = True
             
-        self.screenMap[self.applePos[0]][self.applePos[1]] = 1
+        self.screenMap[self.fruitPos[0]][self.fruitPos[1]] = 1
         
     def step(self, direction):
         # direction = 0 -> up
@@ -103,8 +119,8 @@ class Environment():
             if event.type == pg.QUIT:
                 return
         
-        snakeX = self.snakePos[0][1]
-        snakeY = self.snakePos[0][0]
+        snakeX = self.snake[0][1]
+        snakeY = self.snake[0][0]
         
         if direction == "UP" and self.lastMove == "DOWN":
             direction = "DOWN"
@@ -180,19 +196,7 @@ class Environment():
         return self.screenMap, reward, gameOver
             
             
-    def reset(self):
-        self.screenMap  = np.zeros((self.nRows, self.nColumns))
-        self.snakePos = list()
-        
-        for i in range(self.initSnakeLen):
-            self.snakePos.append((int(self.nRows / 2) + i, int(self.nColumns / 2)))
-            self.screenMap[int(self.nRows / 2) + i][int(self.nColumns / 2)] = 0.5
-        
-        self.screenMap[self.applePos[0]][self.applePos[1]] = 1
-        
-        self.lastMove = 0
-        
-        self.drawScreen()
+
 
 if __name__ == '__main__':
     env = Environment()
