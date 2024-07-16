@@ -21,7 +21,7 @@ minEpsilon = 0.05
 filepathToSave = 'model2.h5'
 
 #Initializing the Environment, the Brain and the Experience Replay Memory 
-env = Environment(0)
+env = Environment()
 brain = Brain((env.nColumns, env.nRows, nLastStates), learningRate)
 model = brain.model
 DQN = Dqn(maxMemory, gamma)
