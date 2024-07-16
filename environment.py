@@ -9,8 +9,8 @@ class Environment():
         
         self.width = 880
         self.height = 880
-        self.nRows = 10
-        self.nColumns = 10
+        self.nRows = 8
+        self.nColumns = 8
         self.initSnakeLen = 2
         self.stepReward = -0.03
         self.deathReward = -1.
