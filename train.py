@@ -42,7 +42,9 @@ nCollected = 0
 maxNCollected = 0
 totNCollected = 0
 scores = list()
-while epoch > 10:
+
+# BLAM for some reason if I mess with this loop and change it to a conditinal while loop it doesnt work??
+for i in range(100):
      epoch += 1
      
      #Resetting the Evironment and starting to play the game
