@@ -50,27 +50,19 @@ total_reward = 0
 epochs_per_log = 2
 scores = list()
 
-wandb.init(
+run = wandb.init(
     # Set the wandb project where this run will be logged
     project="convolutional_snake_ai",
-
-    # Track hyperparameters and run metadata
-    config={
-        "learning_rate": learningRate,
-        "architecture": "CNN",
-        "epochs": max_epochs,
-    }
 )
 
 # BLAM for some reason if I mess with this loop and change it to a conditinal while loop it doesnt work??
-for i in range(max_epochs):
+while True:
      epoch += 1
      
      #Resetting the Evironment and starting to play the game
      env.reset()
      currentState, nextState = resetStates()
-     gameOver = False
-     while not gameOver:
+     while not env.gameOver:
           
           #Selecting an new_direction to play
           if np.random.rand() <= epsilon:
@@ -80,7 +72,7 @@ for i in range(max_epochs):
                new_direction = np.argmax(qvalues)
 
           #Updating the Environment
-          frame, reward, gameOver = env.step(new_direction)
+          frame, reward= env.step(new_direction)
           total_reward += reward
 
           
@@ -90,47 +82,32 @@ for i in range(max_epochs):
           nextState = np.delete(nextState, 0, axis = 3)
           
           #Remembering new experience and training the AI
-          DQN.remember([currentState, new_direction, reward, nextState], gameOver)
+          DQN.remember([currentState, new_direction, reward, nextState], env.gameOver)
           inputs, targets = DQN.getBatch(model, batchSize)
           model.train_on_batch(inputs, targets)
           
-          #Updating the score and current state
-          if env.collected:
-               nCollected += 1
-          
+          # update the current state
           currentState = nextState
 
      
-
      #Updating the epsilon and saving the model
      epsilon -= epsilonDecayRate
      epsilon = max(epsilon, minEpsilon)
      
-     if nCollected > maxNCollected and nCollected > 2:
+     if env.score > maxNCollected and env.score > 2:
           model.save(filepathToSave)
-          maxNCollected = nCollected
+          maxNCollected = env.score
           
      #Displaying the results
-     totNCollected += nCollected
-     nCollected = 0
 
-     if epoch % epochs_per_log == 0 and epoch != 0:
-          scores.append(totNCollected / epochs_per_log)
-          wandb.log({
-               "average_reward": total_reward / epochs_per_log,
-               "average_food_collected": totNCollected / epochs_per_log,
-               "epoch": epoch
-          })
-          total_reward = 0
-          totNCollected = 0
-          plt.plot(scores)
-          plt.xlabel('Epoch / 100')
-          plt.ylabel('Average Collected')
-          plt.show()
+     scores.append(env.score)
+     wandb.log({
+          "average_reward": total_reward,
+          "average_food_collected": env.score,
+          "epoch": epoch
+     })
           
 
-     
-     
      print('Epoch: ' + str(epoch) + ' Current Best: ' + str(maxNCollected) + ' Epsilon: {:.5f}'.format(epsilon))
 
 wandb.finish()

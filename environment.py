@@ -10,6 +10,8 @@ get_reward = {
     2 : 2,
 }
 
+pygame.init()
+
 display = False
 class Environment():
     
@@ -22,9 +24,6 @@ class Environment():
         self.stepReward = -0.03
         self.deathReward = -1.
         self.foodReward = 2.
-
-        self.screen = pygame.display.set_mode((self.width, self.height))
-
         self.reset()
         
         # screenmap is the same layout i had as the matrix
@@ -45,10 +44,13 @@ class Environment():
         self.update_screenMap()
 
         self.collected = False
+        self.gameOver = False
+        self.score = 0
         
         self.lastMove = 0
-        
-        self.drawScreen()
+        if display:
+            self.screen = pygame.display.set_mode((self.width, self.height))
+            self.drawScreen()
 
     
     def placeFruit(self):
@@ -85,16 +87,17 @@ class Environment():
         row, col = self.snake[0]
         if (row, col) == self.fruitPos:
             self.placeFruit()
-            return 2, False
+            self.score += 1
+            return 2
         # check to see if any part of the snake (excluding the head) overlaps coords, and check that we are still inside bounds
         if row < 0 or row > self.nRows-1 or col < 0 or col > self.nColumns-1 or \
             any(row == part[0] and col == part[1] for i, part in enumerate(self.snake) if i > 1):
-            return 1, True
+            self.gameOver = True
+            return 1
     
         # else it means that the snake can just keep moving
         self.snake.pop()
-
-        return 0, False
+        return 0
 
 
 
@@ -114,7 +117,6 @@ class Environment():
         elif direction == 3:
             return (row-1,col-1)
 
-        
     def step(self, direction):
         self.collected = False
         
@@ -138,18 +140,19 @@ class Environment():
         next_coord = self.get_coord(direction)
         # move the head of the snake and then see if the head of the snake has hit anything
         self.snake.appendleft(next_coord)
-        result, gameOver = self.check_collision()
+        result = self.check_collision()
         reward = get_reward[result]
 
-        if not gameOver:
+        if not self.gameOver:
             self.update_screenMap()
-        self.drawScreen()
+        if display:
+            self.drawScreen()
         
         self.lastMove = direction
         
         pygame.time.wait(1)
         
-        return self.screenMap, reward, gameOver
+        return self.screenMap, reward
             
             
 

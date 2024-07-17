@@ -1,0 +1,5 @@
+[default]
+entity = benlam-Tufts University
+project = convolutional_snake_ai
+base_url = https://api.wandb.ai
+
