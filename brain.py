@@ -17,11 +17,11 @@ class Brain():
           #Creating the neural network
           self.model = Sequential()
           
-          self.model.add(Conv2D(32, (3,3), activation = 'relu', input_shape = self.inputShape))
+          self.model.add(Conv2D(16, (3,3), activation = 'relu', input_shape = self.inputShape))
           
           self.model.add(MaxPooling2D((2, 2)))
           
-          self.model.add(Conv2D(64, (2,2), activation = 'relu'))
+          self.model.add(Conv2D(32, (2,2), activation = 'relu'))
           
           self.model.add(Flatten())
           
