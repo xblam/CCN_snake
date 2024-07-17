@@ -45,8 +45,6 @@ epoch = 0
 max_epochs = 100
 nCollected = 0
 maxNCollected = 0
-totNCollected = 0
-total_reward = 0
 epochs_per_log = 2
 scores = list()
 
@@ -61,6 +59,7 @@ while True:
      
      #Resetting the Evironment and starting to play the game
      env.reset()
+     total_reward = 0
      currentState, nextState = resetStates()
      while not env.gameOver:
           
