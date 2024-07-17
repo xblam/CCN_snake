@@ -1,0 +1,53 @@
+{
+    "os": "Windows-10-10.0.19045-SP0",
+    "python": "3.10.13",
+    "heartbeatAt": "2024-07-17T02:32:51.910728",
+    "startedAt": "2024-07-17T02:32:50.985506",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "c:\\Users\\CPU12297-local\\Desktop\\convolutional_nn\\Snake-AI\\train.py",
+    "codePathLocal": "train.py",
+    "codePath": "train.py",
+    "git": {
+        "remote": "https://github.com/xblam/CCN_snake",
+        "commit": "aaef3b9423ff92223ff2fbc9c489938e65175b2b"
+    },
+    "email": "benlam05032004@gmail.com",
+    "root": "C:/Users/CPU12297-local/Desktop/convolutional_nn/Snake-AI",
+    "host": "CPU12297",
+    "username": "CPU12297-local",
+    "executable": "C:\\Users\\CPU12297-local\\anaconda3\\envs\\snake2\\python.exe",
+    "cpu_count": 6,
+    "cpu_count_logical": 6,
+    "cpu_freq": {
+        "current": 2808.0,
+        "min": 0.0,
+        "max": 2808.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 2808.0,
+            "min": 0.0,
+            "max": 2808.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 179.99999618530273,
+            "used": 91.36203384399414
+        }
+    },
+    "gpu": "NVIDIA GeForce GTX 1050 Ti",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce GTX 1050 Ti",
+            "memory_total": 4294967296
+        }
+    ],
+    "memory": {
+        "total": 15.940956115722656
+    }
+}

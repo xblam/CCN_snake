@@ -4,14 +4,6 @@ import numpy as np
 import pygame as pygame
 from collections import deque
 
-
-get_dir = {
-    "UP" : 0,
-    "DOWN" : 1,
-    "RIGHT" : 2,
-    "LEFT" : 3
-}
-
 get_reward = {
     0 : -0.03,
     1 : -1,
@@ -40,7 +32,7 @@ class Environment():
     
 
     def reset(self):
-        self.initial_dir = "UP"
+        self.initial_dir = 0
         self.snake.clear()
         self.screenMap = np.zeros((self.nRows, self.nColumns))
         
@@ -54,7 +46,7 @@ class Environment():
 
         self.collected = False
         
-        self.lastMove = "UP"
+        self.lastMove = 0
         
         self.drawScreen()
 
@@ -90,38 +82,37 @@ class Environment():
         pygame.display.flip()
       
     def check_collision(self):
-        print(self.snake[0])
         row, col = self.snake[0]
         if (row, col) == self.fruitPos:
             self.placeFruit()
-            return 1, False
+            return 2, False
         # check to see if any part of the snake (excluding the head) overlaps coords, and check that we are still inside bounds
-        if any(row == part[0] and col == part[1] for i, part in enumerate(self.snake) if i > 1) \
-            or row < 0 or row >= self.nRows or col < 0 or col >= self.nColumns:
-            return 2, True
+        if row < 0 or row > self.nRows-1 or col < 0 or col > self.nColumns-1 or \
+            any(row == part[0] and col == part[1] for i, part in enumerate(self.snake) if i > 1):
+            return 1, True
     
         # else it means that the snake can just keep moving
         self.snake.pop()
+
         return 0, False
+
+
+
+    # use direction to figure out what the next coordinate of our snake will be
         # action = 0 -> up
         # action = 1 -> down
         # action = 2 -> right
         # action = 3 -> left
-
-
-    # use direction to figure out what the next coordinate of our snake will be #BLAM THIS IS WHERE THE PROBLEM IS
     def get_coord(self, direction):
-        print(self.snake[0])
         row,col = self.snake[0]
-        if direction == "UP":
+        if direction == 0:
             return (row-1,col)
-        elif direction == "DOWN":
+        elif direction == 1:
             return (row+1,col)
-        elif direction == "RIGHT":
+        elif direction == 2:
             return (row,col+1)
-        elif direction == "LEFT":
+        elif direction == 3:
             return (row-1,col-1)
-        print('retuirned anothing')
 
         
     def step(self, direction):
@@ -132,14 +123,14 @@ class Environment():
                 return
     
         # make sure that the snake cannot go back on itself
-        if direction == "UP" and self.lastMove == "DOWN":
-            direction = "DOWN"
-        if direction == "DOWN" and self.lastMove == "UP":
-            direction = "UP"
-        if direction == "LEFT" and self.lastMove == "RIGHT":
-            direction = "RIGHT"
-        if direction == "RIGHT" and self.lastMove == "LEFT":
-            direction = "LEFT"
+        if direction == 0 and self.lastMove == 1:
+            direction = 1
+        if direction == 1 and self.lastMove == 0:
+            direction = 0
+        if direction == 3 and self.lastMove == 2:
+            direction = 2
+        if direction == 2 and self.lastMove == 3:
+            direction = 3
         
         # BLAM right here we have the direction already, so we can just write a function that returns the expected
         #  coord given the current position of the snake and the direction that we are headed
@@ -147,11 +138,11 @@ class Environment():
         next_coord = self.get_coord(direction)
         # move the head of the snake and then see if the head of the snake has hit anything
         self.snake.appendleft(next_coord)
-        print(self.snake[0])
-        result = self.check_collision()
-        reward, gameOver = get_reward[result]
+        result, gameOver = self.check_collision()
+        reward = get_reward[result]
 
-        self.update_screenMap(0)
+        if not gameOver:
+            self.update_screenMap()
         self.drawScreen()
         
         self.lastMove = direction
@@ -175,13 +166,13 @@ if __name__ == '__main__':
                 elif event.key == pygame.K_SPACE and start:
                     start = False
                 if event.key == pygame.K_UP:
-                    direction = "UP"
+                    direction = 0
                 elif event.key == pygame.K_DOWN:
-                    direction = "DOWN"
+                    direction = 1
                 elif event.key == pygame.K_RIGHT:
-                    direction = "RIGHT"
+                    direction = 2
                 elif event.key == pygame.K_LEFT:
-                    direction = "LEFT"
+                    direction = 3
         
         if start:
             _, _, gameOver = env.step(env.initial_dir)

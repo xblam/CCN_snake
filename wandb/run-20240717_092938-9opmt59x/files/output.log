@@ -1,0 +1,56 @@
+1/1 [==============================] - 0s 102ms/step
+1/1 [==============================] - 0s 19ms/step
+1/1 [==============================] - 0s 17ms/step
+1/1 [==============================] - 0s 16ms/step
+1/1 [==============================] - 0s 16ms/step
+1/1 [==============================] - 0s 16ms/step
+1/1 [==============================] - 0s 16ms/step
+1/1 [==============================] - 0s 16ms/step
+1/1 [==============================] - 0s 16ms/step
+1/1 [==============================] - 0s 16ms/step
+1/1 [==============================] - 0s 17ms/step
+1/1 [==============================] - 0s 16ms/step
+1/1 [==============================] - 0s 17ms/step
+1/1 [==============================] - 0s 16ms/step
+1/1 [==============================] - 0s 16ms/step
+1/1 [==============================] - 0s 17ms/step
+1/1 [==============================] - 0s 16ms/step
+1/1 [==============================] - 0s 17ms/step
+1/1 [==============================] - 0s 19ms/step
+1/1 [==============================] - 0s 17ms/step
+1/1 [==============================] - 0s 16ms/step
+1/1 [==============================] - 0s 16ms/step
+1/1 [==============================] - 0s 17ms/step
+1/1 [==============================] - 0s 16ms/step
+1/1 [==============================] - 0s 17ms/step
+1/1 [==============================] - 0s 16ms/step
+1/1 [==============================] - 0s 17ms/step
+1/1 [==============================] - 0s 18ms/step
+1/1 [==============================] - 0s 18ms/step
+1/1 [==============================] - 0s 18ms/step
+1/1 [==============================] - 0s 17ms/step
+1/1 [==============================] - 0s 18ms/step
+1/1 [==============================] - 0s 21ms/step
+1/1 [==============================] - 0s 20ms/step
+1/1 [==============================] - 0s 24ms/step
+1/1 [==============================] - 0s 19ms/step
+1/1 [==============================] - 0s 19ms/step
+1/1 [==============================] - 0s 30ms/step
+1/1 [==============================] - 0s 19ms/step
+1/1 [==============================] - 0s 18ms/step
+1/1 [==============================] - 0s 18ms/step
+1/1 [==============================] - 0s 17ms/step
+Traceback (most recent call last):
+  File "c:\Users\CPU12297-local\Desktop\convolutional_nn\Snake-AI\train.py", line 119, in <module>
+    wandb.log(total_reward / epochs_per_log, totNCollected / epochs_per_log)
+  File "C:\Users\CPU12297-local\anaconda3\envs\snake2\lib\site-packages\wandb\sdk\wandb_run.py", line 449, in wrapper
+    return func(self, *args, **kwargs)
+  File "C:\Users\CPU12297-local\anaconda3\envs\snake2\lib\site-packages\wandb\sdk\wandb_run.py", line 400, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "C:\Users\CPU12297-local\anaconda3\envs\snake2\lib\site-packages\wandb\sdk\wandb_run.py", line 390, in wrapper
+    return func(self, *args, **kwargs)
+  File "C:\Users\CPU12297-local\anaconda3\envs\snake2\lib\site-packages\wandb\sdk\wandb_run.py", line 1877, in log
+    self._log(data=data, step=step, commit=commit)
+  File "C:\Users\CPU12297-local\anaconda3\envs\snake2\lib\site-packages\wandb\sdk\wandb_run.py", line 1636, in _log
+    raise ValueError("wandb.log must be passed a dictionary")
+ValueError: wandb.log must be passed a dictionary
